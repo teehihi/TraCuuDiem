@@ -1,3 +1,10 @@
+[project]
+name = "diem-thpt-app"
+version = "0.1.0"
+description = "Ứng dụng tra cứu điểm thi THPTQG 2025"
+authors = [{ name = "Tee" }]
+requires-python = ">=3.8"
+
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
