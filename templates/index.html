@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Tra cứu điểm THPTQG 2025 | Code by Tee</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-6">
+
+  <div class="max-w-2xl mx-auto bg-white p-6 rounded shadow">
+    <h1 class="text-2xl font-bold mb-4 text-center text-blue-700">Tra cứu điểm thi THPT Quốc gia 2025</h1>
+    <h2 class="text-1xl font-bold mb-3 text-center text-blue-500"><i>Code by Tee</i></h2>
+
+    {% if error %}
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 mb-4 rounded">
+        {{ error }}
+      </div>
+    {% endif %}
+
+    <form method="post" class="space-y-4">
+      <div>
+        <label class="block font-semibold">Số báo danh:</label>
+        <input type="text" name="sbd" class="w-full p-2 border rounded" required>
+      </div>
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Tra cứu</button>
+    </form>
+
+    {% if result %}
+      <div class="mt-6 border-t pt-4">
+        <h2 class="text-xl font-semibold text-green-700 mb-2">Kết quả tra cứu</h2>
+        <ul class="flex flex-row space-x-4 mt-2">
+          <li><p><strong>Số báo danh:</strong> {{ result.sbd }}</p></li>
+          <li><p><strong>Tỉnh/TP:</strong> {{ result.ten_tinh }}</p></li>
+        </ul>
+      </div>
+      <div class="mt-6 border-t pt-1"></div>
+        <h3 class="mt-4 font-semibold">Điểm các môn:</h3>
+        <ul class="flex flex-row space-x-4 mt-2">
+          {% for mon, diem in result.diem.items() %}
+            <li>{{ mon }}: <strong>{{ diem }}</strong></li>
+          {% endfor %}
+        </ul>
+
+        <h3 class="mt-4 font-semibold">Tổng điểm theo các tổ hợp:</h3>
+        {% if result.tohop_diem %}
+          <ul class="flex flex-row space-x-4 mt-2">
+            {% for th_name, th_diem in result.tohop_diem.items() %}
+              <li>{{ th_name }}: <strong>{{ th_diem }}</strong></li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-gray-600">Không có tổ hợp điểm nào phù hợp.</p>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+
+  <script>
+    window.onload = function() {
+      localStorage.clear(); // Xóa tất cả dữ liệu localStorage khi tải trang
+      // Làm mới giao diện để đảm bảo không giữ dữ liệu cũ
+      if (window.history.replaceState) {
+        window.history.replaceState(null, document.title, window.location.href);
+      }
+    };
+  </script>
+</body>
+</html>
