@@ -1,4 +1,4 @@
-
+<!-- 
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -190,6 +190,190 @@
                     updateDatalist('schools', data);
                 })
                 .catch(error => console.error('Error fetching schools:', error));
+        }
+    </script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Tra cứu điểm THPTQG 2025 | Code by Tee</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon" sizes="32x32">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .text-gradient {
+            background-image: linear-gradient(to bottom left, #15803d, #22c55e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-teal-600 flex items-center justify-center min-h-screen p-4">
+
+    <div class="max-w-4xl w-full mx-auto bg-white px-4 sm:px-6 md:px-8 py-6 sm:py-8 rounded-xl shadow-2xl">
+        <h1 class="text-xl sm:text-2xl md:text-3xl font-bold mb-3 text-center text-gradient">Tra cứu điểm thi THPT Quốc gia 2025</h1>
+        <h2 class="text-xs sm:text-sm font-semibold mb-6 text-center text-gray-500 tracking-wider"><i>Code by Tee</i></h2>
+
+        {% if error %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-4 rounded-lg relative" role="alert">
+            <span class="block sm:inline">{{ error }}</span>
+        </div>
+        {% endif %}
+
+        <form method="post" action="/" class="space-y-6">
+            <div>
+                <label for="sbd-input" class="block mb-2 text-sm font-medium text-gray-900 font-bold">Số báo danh:</label>
+                <input type="text" name="sbd" id="sbd-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 block w-full p-3" placeholder="Nhập số báo danh của bạn" required value="{{ result.sbd if result }}">
+            </div>
+            <button type="submit" name="action" value="lookup" class="w-full text-white font-semibold rounded-lg text-sm sm:text-base px-5 py-3 text-center transition-all duration-300 transform hover:scale-105 focus:ring-4 focus:outline-none focus:ring-green-300" style="background-image: linear-gradient(to bottom left,#15803d, #22c55e);">
+                Tra cứu
+            </button>
+        </form>
+
+        {% if result %}
+        <div class="mt-8 border-t-2 border-gray-100 pt-6">
+            <h2 class="text-lg sm:text-xl font-bold text-gray-800 mb-4">Kết quả tra cứu</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg">
+                <p>Số báo danh: <strong class="text-base sm:text-lg text-gray-900">{{ result.sbd }}</strong></p>
+                <p>Tỉnh/TP: <strong class="text-base sm:text-lg text-gray-900">{{ result.ten_tinh }}</strong></p>
+            </div>
+
+            <div class="mt-6">
+                <h3 class="font-semibold text-base sm:text-lg text-gray-800 mb-3">Điểm các môn:</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                    {% for mon, diem in result.diem.items() %}
+                    <div class="bg-gray-100 p-4 rounded-lg text-center">
+                        <span class="block text-sm text-gray-600">{{ mon }}</span>
+                        <strong class="text-xl font-bold text-gradient">{{ diem }}</strong>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {% if result.tohop_diem %}
+            <div class="mt-6">
+                <h3 class="font-semibold text-base sm:text-lg text-gray-800 mb-3">Tổng điểm theo các tổ hợp:</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                    {% for th_name, th_diem in result.tohop_diem.items() %}
+                    <div class="bg-gradient-to-r from-orange-100 to-green-100 p-4 rounded-lg text-center">
+                        <span class="block text-sm font-medium text-gray-700">{{ th_name }}</span>
+                        <strong class="text-xl font-bold text-gray-900">{{ th_diem }}</strong>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="mt-6 border-t pt-6">
+                <h3 class="font-semibold text-base sm:text-lg text-gray-800 mb-3">Lọc kết quả:</h3>
+                <form method="post" action="/" class="space-y-4">
+                    <div>
+                        <label for="filter-truong" class="block mb-2 text-sm font-medium text-gray-700">Chọn trường:</label>
+                        <input type="text" name="filter_truong" id="filter-truong" list="schools" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-3" placeholder="Nhập hoặc chọn tên trường" value="{{ selected_school or '' }}">
+                        <datalist id="schools">
+                            {% for school in schools_list %}
+                            <option value="{{ school }}">
+                            {% endfor %}
+                        </datalist>
+                    </div>
+                    <div>
+                        <label for="filter-nganh" class="block mb-2 text-sm font-medium text-gray-700">Chọn ngành:</label>
+                        <input type="text" name="filter_nganh" id="filter-nganh" list="majors" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-3" placeholder="Nhập hoặc chọn tên ngành" value="{{ selected_major or '' }}">
+                        <datalist id="majors">
+                            {% for major in majors_list %}
+                            <option value="{{ major }}">
+                            {% endfor %}
+                        </datalist>
+                    </div>
+                    <button type="submit" name="action" value="filter" class="w-full text-white font-semibold rounded-lg text-sm sm:text-base px-5 py-3 text-center transition-all duration-300 transform hover:scale-105 focus:ring-4 focus:outline-none focus:ring-green-300" style="background-image: linear-gradient(to bottom left,#15803d, #22c55e);">
+                        Áp dụng bộ lọc
+                    </button>
+                </form>
+            </div>
+
+            {% if filtered_schools is defined and filtered_schools %}
+            <div class="mt-6">
+                <h3 class="font-semibold text-base sm:text-lg text-gray-800 mb-3">Các trường và ngành phù hợp (Sắp xếp theo điểm chuẩn giảm dần):</h3>
+                <div class="overflow-x-auto rounded-lg border border-gray-200 text-sm">
+                    <table class="min-w-full bg-white">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="py-3 px-4 text-left font-semibold text-gray-600">Trường</th>
+                                <th class="py-3 px-4 text-left font-semibold text-gray-600">Ngành</th>
+                                <th class="py-3 px-4 text-left font-semibold text-gray-600">Tổ hợp</th>
+                                <th class="py-3 px-4 text-left font-semibold text-gray-600">Điểm chuẩn 2024</th>
+                                <th class="py-3 px-4 text-left font-semibold text-gray-600">Điểm của bạn</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            {% for school in filtered_schools %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="py-3 px-4">{{ school.truong }}</td>
+                                <td class="py-3 px-4">{{ school.nganh }}</td>
+                                <td class="py-3 px-4">{{ school.toh }}</td>
+                                <td class="py-3 px-4 font-semibold">{{ school.diem_chuan }}</td>
+                                <td class="py-3 px-4 font-semibold text-green-600">{{ school.diem }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% elif result and filtered_schools is defined %}
+            <div class="mt-6 bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded-lg">
+                <p>Không tìm thấy trường hoặc ngành nào phù hợp với bộ lọc của bạn.</p>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const schoolInput = document.getElementById('filter-truong');
+            const majorInput = document.getElementById('filter-nganh');
+
+            schoolInput.addEventListener('input', function () {
+                updateMajors(this.value);
+            });
+
+            majorInput.addEventListener('input', function () {
+                updateSchools(this.value);
+            });
+        });
+
+        function updateDatalist(datalistId, items) {
+            const datalist = document.getElementById(datalistId);
+            datalist.innerHTML = '';
+            items.forEach(function (item) {
+                const option = document.createElement('option');
+                option.value = item;
+                datalist.appendChild(option);
+            });
+        }
+
+        function updateMajors(schoolName) {
+            const endpoint = schoolName ? `/get_majors?school=${encodeURIComponent(schoolName)}` : '/get_majors';
+            fetch(endpoint)
+                .then(response => response.json())
+                .then(data => updateDatalist('majors', data))
+                .catch(console.error);
+        }
+
+        function updateSchools(majorName) {
+            const endpoint = majorName ? `/get_schools?major=${encodeURIComponent(majorName)}` : '/get_schools';
+            fetch(endpoint)
+                .then(response => response.json())
+                .then(data => updateDatalist('schools', data))
+                .catch(console.error);
         }
     </script>
 </body>
