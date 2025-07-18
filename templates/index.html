@@ -206,6 +206,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon" sizes="32x32">
+    <script src="https://kit.fontawesome.com/005a218861.js" crossorigin="anonymous"></script>
     <style>
         body { font-family: 'Poppins', sans-serif; }
         .text-gradient {
@@ -334,7 +335,24 @@
             {% endif %}
         </div>
         {% endif %}
+
+        <!-- Footer with Font Awesome icons -->
+        <div class="mt-12 text-center">
+            <div class="flex justify-center space-x-6 text-gray-700 text-2xl">
+                <a href="https://www.facebook.com/nhatthien.nguyen.566" target="_blank" class="hover:text-blue-600 transform transition-transform hover:scale-125 mx-2">
+                    <i class="fab fa-facebook"></i></a>
+                <a href="https://www.tiktok.com/@nkqt.tee" target="_blank" class="hover:text-black transform transition-transform hover:scale-125 mx-2">
+                    <i class="fab fa-tiktok"></i></a>
+                <a href="https://www.youtube.com/@tee.2105" target="_blank" class="hover:text-red-600 transform transition-transform hover:scale-125 mx-2">
+                    <i class="fab fa-youtube"></i></a>
+            </div>
+            <p class="mt-4 text-sm text-gray-500">© 2025 by Tee</p>
+        </div>
+        
+
     </div>
+
+    
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -376,5 +394,6 @@
                 .catch(console.error);
         }
     </script>
+
 </body>
 </html>
