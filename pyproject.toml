@@ -1,5 +1,5 @@
 [project]
-name = "diem-thpt-app"
+name = "diem_thpt_app"
 version = "0.1.0"
 description = "Ứng dụng tra cứu điểm thi THPTQG 2025"
 authors = [{ name = "Tee" }]
