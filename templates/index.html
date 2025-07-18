@@ -4,52 +4,92 @@
   <meta charset="UTF-8">
   <title>Tra cứu điểm THPTQG 2025 | Code by Tee</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon" sizes="32x32">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+    .text-gradient {
+     background-image: linear-gradient(to bottom left,#15803d, #22c55e);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 p-6">
+<body class="bg-teal-600 flex items-center justify-center min-h-screen p-4">
 
-  <div class="max-w-2xl mx-auto bg-white p-6 rounded shadow">
-    <h1 class="text-2xl font-bold mb-4 text-center text-blue-700">Tra cứu điểm thi THPT Quốc gia 2025</h1>
-    <h2 class="text-1xl font-bold mb-3 text-center text-blue-500"><i>Code by Tee</i></h2>
+  <div class="max-w-2xl w-full mx-auto bg-white p-8 rounded-xl shadow-2xl">
+    <h1 class="text-3xl font-bold mb-3 text-center text-gradient">
+      Tra cứu điểm thi THPT Quốc gia 2025
+    </h1>
+    <h2 class="text-sm font-semibold mb-6 text-center text-gray-500 tracking-wider">
+      <i>Code by Tee</i>
+    </h2>
 
     {% if error %}
-      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 mb-4 rounded">
-        {{ error }}
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-4 rounded-lg relative" role="alert">
+        <span class="block sm:inline">{{ error }}</span>
       </div>
     {% endif %}
 
-    <form method="post" class="space-y-4">
+    <form method="post" class="space-y-6">
       <div>
-        <label class="block font-semibold">Số báo danh:</label>
-        <input type="text" name="sbd" class="w-full p-2 border rounded" required>
+        <label for="sbd-input" class="block mb-2 text-sm font-medium text-gray-900  font-bold">Số báo danh:</label>
+        <input type="text" name="sbd" id="sbd-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 block w-full p-3" placeholder="Nhập số báo danh của bạn" required>
       </div>
-      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Tra cứu</button>
+      <button type="submit"
+        class="w-full text-white font-semibold rounded-lg text-base px-5 py-3 text-center transition-all duration-300 transform hover:scale-105 focus:ring-4 focus:outline-none focus:ring-green-300"
+        style="background-image: linear-gradient(to bottom left,#15803d, #22c55e);">
+        Tra cứu
+      </button>
+
     </form>
 
     {% if result %}
-      <div class="mt-6 border-t pt-4">
-        <h2 class="text-xl font-semibold text-green-700 mb-2">Kết quả tra cứu</h2>
-        <ul class="flex flex-row space-x-4 mt-2">
-          <li><p><strong>Số báo danh:</strong> {{ result.sbd }}</p></li>
-          <li><p><strong>Tỉnh/TP:</strong> {{ result.ten_tinh }}</p></li>
-        </ul>
-      </div>
-      <div class="mt-6 border-t pt-1"></div>
-        <h3 class="mt-4 font-semibold">Điểm các môn:</h3>
-        <ul class="flex flex-row space-x-4 mt-2">
-          {% for mon, diem in result.diem.items() %}
-            <li>{{ mon }}: <strong>{{ diem }}</strong></li>
-          {% endfor %}
-        </ul>
+      <div class="mt-8 border-t-2 border-gray-100 pt-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Kết quả tra cứu</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg">
+           <div class="flex items-center space-x-2">
+             <p class="text-gray-600">Số báo danh:</p>
+             <strong class="text-lg text-gray-900">{{ result.sbd }}</strong>
+           </div>
+           <div class="flex items-center space-x-2">
+             <p class="text-gray-600">Tỉnh/TP:</p>
+             <strong class="text-lg text-gray-900">{{ result.ten_tinh }}</strong>
+           </div>
+        </div>
 
-        <h3 class="mt-4 font-semibold">Tổng điểm theo các tổ hợp:</h3>
+        <div class="mt-6">
+            <h3 class="font-semibold text-lg text-gray-800 mb-3">Điểm các môn:</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {% for mon, diem in result.diem.items() %}
+                <div class="bg-gray-100 p-4 rounded-lg text-center">
+                  <span class="block text-sm text-gray-600">{{ mon }}</span>
+                  <strong class="text-xl font-bold text-gradient">{{ diem }}</strong>
+                </div>
+              {% endfor %}
+            </div>
+        </div>
+
         {% if result.tohop_diem %}
-          <ul class="flex flex-row space-x-4 mt-2">
-            {% for th_name, th_diem in result.tohop_diem.items() %}
-              <li>{{ th_name }}: <strong>{{ th_diem }}</strong></li>
-            {% endfor %}
-          </ul>
+          <div class="mt-6">
+              <h3 class="font-semibold text-lg text-gray-800 mb-3">Tổng điểm theo các tổ hợp:</h3>
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {% for th_name, th_diem in result.tohop_diem.items() %}
+                  <div class="bg-gradient-to-r from-orange-100 to-green-100 p-4 rounded-lg text-center">
+                    <span class="block text-sm font-medium text-gray-700">{{ th_name }}</span>
+                    <strong class="text-xl font-bold text-gray-900">{{ th_diem }}</strong>
+                  </div>
+                {% endfor %}
+              </div>
+          </div>
         {% else %}
-          <p class="text-gray-600">Không có tổ hợp điểm nào phù hợp.</p>
+          <p class="mt-4 text-gray-600">Không có tổ hợp điểm nào phù hợp.</p>
         {% endif %}
       </div>
     {% endif %}
